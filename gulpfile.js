@@ -27,7 +27,7 @@ gulp.task('templates:compile', function buildHTML(){
 /*--------------Sass compile--------------*/
 gulp.task('styles:compile', function(){
 	return gulp.src('source/styles/main.scss')
-		.pipe(sass().on('error', sass.logError))
+		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 		.pipe(gulp.dest('build/css'));
 });
 

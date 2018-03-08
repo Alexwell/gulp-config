@@ -3,7 +3,8 @@ var gulp = require('gulp'),
 		pug = require('gulp-pug'),
 		sass =require('gulp-sass'),
 		spritesmith = require('gulp.spritesmith'),
-		rimraf = require('rimraf');
+		rimraf = require('rimraf'),
+		rename = require('gulp-rename');
 
 /*--------------Server--------------*/
 gulp.task('server', function(){
@@ -28,6 +29,7 @@ gulp.task('templates:compile', function buildHTML(){
 gulp.task('styles:compile', function(){
 	return gulp.src('source/styles/main.scss')
 		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+		.pipe(rename('main.min.css'))
 		.pipe(gulp.dest('build/css'));
 });
 

@@ -22,11 +22,11 @@
   "homepage": "https://github.com/alexander-web/gulp-config#readme",
   "devDependencies": {
     "browser-sync": "^2.23.6",
-    "gulp": "^3.9.1",
+    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-pug": "^3.3.0",
-    "gulp-sass": "^3.1.0"
+    "gulp-sass": "^3.1.0",
+    "gulp.spritesmith": "^6.9.0",
+    "rimraf": "^2.6.2"
   },
-  "dependencies": {
-    "gulp.spritesmith": "^6.9.0"
-  }
+  "dependencies": {}
 }

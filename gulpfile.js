@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-		brovserSync = require('browser-sync').create(),
+		browserSync = require('browser-sync').create(),
 		pug = require('gulp-pug'),
 		sass =require('gulp-sass'),
 		spritesmith = require('gulp.spritesmith'),
@@ -40,7 +40,7 @@ gulp.task('sprite', function(cb){
 	}));
 
 	spriteData.img.pipe(gulp.dest('build/images'));
-	dpriteData.css.pipe(gulp.dest('source/styles/global'));
+	spriteData.css.pipe(gulp.dest('source/styles/global'));
 	cb();
 });
 

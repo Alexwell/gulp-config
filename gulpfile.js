@@ -88,12 +88,19 @@ gulp.task('copy:fonts', function(){
 
 /*--------------Copy images--------------*/
 gulp.task('copy:images', function(){
-	return gulp.src('./source/images/**/*.*')
-		.pipe(gulp.dest('build/images'));
+	return gulp.src('./source/img/**/*.*')
+		.pipe(gulp.dest('build/img'));
 });
 
-/*--------------Copy - neeg gulp 4--------------*/
-gulp.task('copy', gulp.parallel('copy:fonts', 'copy:images'));
+/*--------------Copy php--------------*/
+galp.task('copy:php', function(){
+	return gulp.src('./source/php/**/*.php')
+		.pipe(gulp.dest('build/php'));
+});
+
+
+/*--------------Copy --------------*/
+gulp.task('copy', gulp.parallel('copy:fonts', 'copy:images', 'copy:php'));
 
 /*--------------Watchers--------------*/
 gulp.task('watch', function(){

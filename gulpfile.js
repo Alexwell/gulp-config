@@ -5,7 +5,8 @@ var gulp = require('gulp'),
 		spritesmith = require('gulp.spritesmith'),
 		rimraf = require('rimraf'),
 		rename = require('gulp-rename'),
-		autoprefixer = require('gulp-autoprefixer');
+		autoprefixer = require('gulp-autoprefixer'),
+		sourcemaps = require('gulp-sourcemaps');
 		// postcss = require('gulp-postcss');
 
 /*--------------Server--------------*/
@@ -32,9 +33,11 @@ gulp.task('styles:compile', function(){
 	
 
 	return gulp.src('source/styles/main.scss')
+		.pipe(sourcemaps.init())
 		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 		.pipe(autoprefixer({browsers: ['last 15 versions', '> 1%', 'ie 8', 'ie 7']}))
 		.pipe(rename('main.min.css'))
+		.pipe(sourcemaps.write('./maps'))
 		.pipe(gulp.dest('build/css'));
 });
 

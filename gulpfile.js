@@ -10,7 +10,8 @@ var gulp = require('gulp'),
 		htmlmin = require('gulp-htmlmin'),
 		useref = require('gulp-useref'),
 		uglify = require('gulp-uglify'),
-		gulpif = require('gulp-if');
+		gulpif = require('gulp-if'),
+		lazypipe = require('lazypipe');
 	
 /*--------------Server--------------*/
 gulp.task('server', function(){
@@ -54,12 +55,14 @@ gulp.task('styles:compile', function(){
 /*--------------HTML JS--------------*/
 gulp.task('html:compile', function(){
 	return gulp.src('source/**/*.html')
-		.pipe(useref())
+		// .pipe(useref())
+		.pipe(useref({}, lazypipe().pipe(sourcemaps.init)))
 		.pipe(gulpif('*.js', uglify()))
 		.pipe(htmlmin(
 		{
 			collapseWhitespace: true
 		}))
+		.pipe(sourcemaps.write('../build'))
 		.pipe(gulp.dest('build'));
 });
 

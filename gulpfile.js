@@ -7,9 +7,11 @@ var gulp = require('gulp'),
 		rename = require('gulp-rename'),
 		autoprefixer = require('gulp-autoprefixer'),
 		sourcemaps = require('gulp-sourcemaps'),
-		htmlmin = require('gulp-htmlmin');
-		// postcss = require('gulp-postcss');
-
+		htmlmin = require('gulp-htmlmin'),
+		useref = require('gulp-useref'),
+		uglify = require('gulp-uglify'),
+		gulpif = require('gulp-if');
+	
 /*--------------Server--------------*/
 gulp.task('server', function(){
 	browserSync.init({
@@ -20,16 +22,6 @@ gulp.task('server', function(){
 	gulp.watch('build/**/*').on('change', browserSync.reload);
 });
 
-/*--------------Pug compile--------------*/
-// gulp.task('pug:compile', function buildHTML(){
-// 	return gulp.src('source/template/index.pug')
-// 		.pipe(pug({
-// 			pretty:true
-// 		}))
-// 		.pipe(htmlmin({collapseWhitespace: true}))
-// 		.pipe(gulp.dest('build'))
-// });
-
 gulp.task('pug:compile', function buildHTML(){
 	return gulp.src('source/template/**/*.pug')
 		.pipe(pug({
@@ -39,11 +31,14 @@ gulp.task('pug:compile', function buildHTML(){
 });
 
 /*--------------HTML compile--------------*/
-gulp.task('html:compile', function(){
-	return gulp.src('source/**/*.html')
-		.pipe(htmlmin({collapseWhitespace: true}))
-		.pipe(gulp.dest('build'))
-});
+// gulp.task('html:compile', function(){
+// 	return gulp.src('source/**/*.html')
+// 		.pipe(htmlmin(
+// 		{
+// 			collapseWhitespace: true
+// 		}))
+// 		.pipe(gulp.dest('build'))
+// });
 
 /*--------------Scss compile--------------*/
 gulp.task('styles:compile', function(){
@@ -54,6 +49,18 @@ gulp.task('styles:compile', function(){
 		.pipe(rename('main.min.css'))
 		.pipe(sourcemaps.write('./maps'))
 		.pipe(gulp.dest('build/css'));
+});
+
+/*--------------HTML JS--------------*/
+gulp.task('html:compile', function(){
+	return gulp.src('source/**/*.html')
+		.pipe(useref())
+		.pipe(gulpif('*.js', uglify()))
+		.pipe(htmlmin(
+		{
+			collapseWhitespace: true
+		}))
+		.pipe(gulp.dest('build'));
 });
 
 /*--------------Sprites--------------*/
@@ -91,14 +98,15 @@ gulp.task('copy', gulp.parallel('copy:fonts', 'copy:images'));
 
 /*--------------Watchers--------------*/
 gulp.task('watch', function(){
-	gulp.watch('source/template/**/*.pug', gulp.series('pug:compile'));
+	// gulp.watch('source/template/**/*.pug', gulp.series('pug:compile'));
 	gulp.watch('source/**/*.html', gulp.series('html:compile'));
 	gulp.watch(['source/styles/**/*.scss', 'source/styles/**/*.css'], gulp.series('styles:compile'));
+	// gulp.watch('source/js/**/*.js', gulp.series('js:compile'));
 });
 
 gulp.task('default', gulp.series(
 	'clean',
-	'pug:compile',
+	// 'pug:compile',
 	gulp.parallel('html:compile', 'styles:compile', 'sprite', 'copy'),
 	gulp.parallel('watch', 'server')
 	)

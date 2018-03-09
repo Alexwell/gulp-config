@@ -4,7 +4,9 @@ var gulp = require('gulp'),
 		sass =require('gulp-sass'),
 		spritesmith = require('gulp.spritesmith'),
 		rimraf = require('rimraf'),
-		rename = require('gulp-rename');
+		rename = require('gulp-rename'),
+		autoprefixer = require('gulp-autoprefixer');
+		// postcss = require('gulp-postcss');
 
 /*--------------Server--------------*/
 gulp.task('server', function(){
@@ -27,8 +29,11 @@ gulp.task('templates:compile', function buildHTML(){
 
 /*--------------Sass compile--------------*/
 gulp.task('styles:compile', function(){
+	
+
 	return gulp.src('source/styles/main.scss')
 		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+		.pipe(autoprefixer({browsers: ['last 15 versions', '> 1%', 'ie 8', 'ie 7']}))
 		.pipe(rename('main.min.css'))
 		.pipe(gulp.dest('build/css'));
 });

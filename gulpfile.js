@@ -8,11 +8,9 @@ var gulp = require('gulp'),
 		autoprefixer = require('gulp-autoprefixer'),
 		sourcemaps = require('gulp-sourcemaps'),
 		htmlmin = require('gulp-htmlmin'),
-		useref = require('gulp-useref'),
 		uglify = require('gulp-uglify'),
-		gulpif = require('gulp-if'),
-		lazypipe = require('lazypipe');
-	
+		concat = require('gulp-concat');
+			
 /*--------------Server--------------*/
 gulp.task('server', function(){
 	browserSync.init({
@@ -32,14 +30,15 @@ gulp.task('pug:compile', function buildHTML(){
 });
 
 /*--------------HTML compile--------------*/
-// gulp.task('html:compile', function(){
-// 	return gulp.src('source/**/*.html')
-// 		.pipe(htmlmin(
-// 		{
-// 			collapseWhitespace: true
-// 		}))
-// 		.pipe(gulp.dest('build'))
-// });
+gulp.task('html:compile', function(){
+	return gulp.src('source/**/*.html')
+		.pipe(htmlmin(
+		{
+			collapseWhitespace: true,
+			removeComments:true
+		}))
+		.pipe(gulp.dest('build'))
+});
 
 /*--------------Scss compile--------------*/
 gulp.task('styles:compile', function(){
@@ -52,18 +51,23 @@ gulp.task('styles:compile', function(){
 		.pipe(gulp.dest('build/css'));
 });
 
-/*--------------HTML JS--------------*/
-gulp.task('html:compile', function(){
-	return gulp.src('source/**/*.html')
-		// .pipe(useref())
-		.pipe(useref({}, lazypipe().pipe(sourcemaps.init)))
-		.pipe(gulpif('*.js', uglify()))
-		.pipe(htmlmin(
-		{
-			collapseWhitespace: true
-		}))
-		.pipe(sourcemaps.write('../build'))
-		.pipe(gulp.dest('build'));
+/*----------------JS-----------------*/
+gulp.task('js:compile', function(){
+	var jsOrder = [
+		'source/js/script1.js',
+		'source/js/script2.js',
+		'source/js/script3.js',
+		'source/js/newjs/script4.js',
+		'source/js/newjs2/script5.js',
+		'source/js/script6.js',
+		'source/js/script7.js'
+	];
+	return gulp.src(jsOrder) 
+		.pipe(sourcemaps.init())
+		.pipe(concat('main.min.js'))
+		.pipe(uglify())
+		.pipe(sourcemaps.write('./maps'))
+		.pipe(gulp.dest('./build/js'));
 });
 
 /*--------------Sprites--------------*/
@@ -104,13 +108,13 @@ gulp.task('watch', function(){
 	// gulp.watch('source/template/**/*.pug', gulp.series('pug:compile'));
 	gulp.watch('source/**/*.html', gulp.series('html:compile'));
 	gulp.watch(['source/styles/**/*.scss', 'source/styles/**/*.css'], gulp.series('styles:compile'));
-	// gulp.watch('source/js/**/*.js', gulp.series('js:compile'));
+	gulp.watch('source/js/**/*.js', gulp.series('js:compile'));
 });
 
 gulp.task('default', gulp.series(
 	'clean',
 	// 'pug:compile',
-	gulp.parallel('html:compile', 'styles:compile', 'sprite', 'copy'),
+	gulp.parallel('html:compile', 'styles:compile', 'js:compile', 'sprite', 'copy'),
 	gulp.parallel('watch', 'server')
 	)
 );

@@ -6,7 +6,8 @@ var gulp = require('gulp'),
 		rimraf = require('rimraf'),
 		rename = require('gulp-rename'),
 		autoprefixer = require('gulp-autoprefixer'),
-		sourcemaps = require('gulp-sourcemaps');
+		sourcemaps = require('gulp-sourcemaps'),
+		htmlmin = require('gulp-htmlmin');
 		// postcss = require('gulp-postcss');
 
 /*--------------Server--------------*/
@@ -25,6 +26,7 @@ gulp.task('templates:compile', function buildHTML(){
 		.pipe(pug({
 			pretty:true
 		}))
+		.pipe(htmlmin({collapseWhitespace: true}))
 		.pipe(gulp.dest('build'))
 });
 

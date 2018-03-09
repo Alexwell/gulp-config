@@ -1,1 +1,0 @@
-console.log("hello from script 5!");

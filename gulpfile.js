@@ -100,6 +100,7 @@ gulp.task('copy:fonts', function(){
 		.pipe(gulp.dest('build/fonts'));
 });
 
+
 /*--------------Copy images--------------*/
 gulp.task('copy:images', function(){
 	return gulp.src('./source/img/**/*.*')

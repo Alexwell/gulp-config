@@ -134,6 +134,12 @@ gulp.task('copy:php', function () {
 		.pipe(gulp.dest('build/php'));
 });
 
+/*--------------Copy libs--------------*/
+gulp.task('copy:libs', function(){
+	return gulp.src('./source/libs/**/*.*')
+		.pipe(gulp.dest('build/libs'));
+});
+
 /*--------------Copy other--------------*/
 gulp.task('copy:other', function () {
 	var otherSrc = [
@@ -144,7 +150,7 @@ gulp.task('copy:other', function () {
 });
 
 /*--------------Copy --------------*/
-gulp.task('copy', gulp.parallel('copy:fonts', 'copy:images', 'copy:php', 'copy:other'));
+gulp.task('copy', gulp.parallel('copy:fonts', 'copy:images', 'copy:php','copy:libs','copy:other'));
 
 /*--------------Watchers--------------*/
 gulp.task('watch', function () {
@@ -155,6 +161,8 @@ gulp.task('watch', function () {
 	gulp.watch('source/img/**/*.*', gulp.series('copy:images'));
 	gulp.watch('source/php/**/*.php', gulp.series('copy:php'));
 	gulp.watch('source/fonts/**/*.*', gulp.series('copy:fonts'));
+	gulp.watch('source/fonts/**/*.*', gulp.series('copy:libs'));
+	gulp.watch('source/fonts/**/*.*', gulp.series('copy:other'));
 });
 
 gulp.task('default', gulp.series(

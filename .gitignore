@@ -1,6 +1,9 @@
 ###User###
 build
 node_modules
+tmp
+temp
+.vscode
 
 ###Windows###
 
